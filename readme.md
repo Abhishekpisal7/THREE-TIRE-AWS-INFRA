@@ -7,17 +7,34 @@ environments (dev, stage, prod) with reusable modules and configuration files.
 ## 🧱 Project Structure
 
 ```plaintext
-├── backend.tf           # Remote state configuration
-├── provider.tf          # AWS provider setup
-├── variables.tf         # Global variables definitions
-├── outputs.tf           # Global outputs
-├── terraform.tfvars     # Default variable values (environment-specific overrides live in environments/*)
-├── modules/             # Reusable modules (vpc, subnets, security-groups, etc.)
-├── environments/        # Environment-specific configuration directories
-│   ├── dev/
-│   ├── stage/
-│   └── prod/
-└── scripts/             # Helper scripts (example userdata for EC2 instances)
+├── modules/                # Reusable modules (see list below)
+│   ├── alb/
+│   ├── autoscaling/
+│   ├── bastion/
+│   ├── ec2/
+│   ├── iam/
+│   ├── internet-gateway/
+│   ├── nat-gateway/
+│   ├── rds/
+│   ├── route-tables/
+│   ├── security-groups/
+│   ├── subnets/
+│   └── vpc/
+├── environments/           # Environment-specific configuration
+│   ├── dev/                # development-specific files
+│   │   ├── backend.tf
+│   │   ├── locals.tf
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── provider.tf
+│   │   ├── README.md
+│   │   ├── terraform.tfvars   # default/override values live here
+│   │   └── variables.tf
+│   ├── stage/              # staging environment (similar set of files)
+│   └── prod/               # production configuration
+└── scripts/                # Helper scripts
+    ├── userdata-app.sh
+    └── userdata-web.sh
 ```
 
 Each module encapsulates a piece of infrastructure (for example, `vpc/`, `ec2/`,
@@ -40,7 +57,11 @@ reusability and clarity when composing environments.
    git clone <repo-url>
    cd three-tier-aws-infra
    ```
-3. Initialize Terraform (choose an environment folder if using partial configs):
+3. Copy or edit the default variable file in the target environment. A
+   sample `terraform.tfvars` with example values exists under
+   `environments/dev/`; modify it or duplicate it for `stage`/`prod` as
+   required.
+4. Initialize Terraform (choose an environment folder if using partial configs):
    ```bash
    terraform init
    ```
@@ -76,8 +97,9 @@ specific usage details.
 
 ## 🔧 Customization
 
-- Modify `terraform.tfvars` or environment-specific tfvars to adjust CIDRs,
-  instance sizes, AWS regions, etc.
+- Modify the `terraform.tfvars` file inside the appropriate environment
+  directory (`environments/dev/` by default) to adjust CIDRs, instance sizes,
+  AWS regions, etc.
 - Add or adjust module inputs when composing a new environment.
 
 ## 🧪 Testing & Validation
