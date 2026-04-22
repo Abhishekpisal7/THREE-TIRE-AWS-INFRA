@@ -56,3 +56,8 @@ variable "common_tags" {
   description = "common tags"
   type = map(string)
 }
+
+variable "user_data_web" {
+  description = "userdata for the instance"
+  type = string
+}

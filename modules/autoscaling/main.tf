@@ -7,6 +7,7 @@ resource "aws_launch_template" "public_subnet_lt" {
   key_name = var.key
   vpc_security_group_ids = [ var.public_subnet_security_group_id ]
 
+  user_data = var.user_data_web
   tags = merge(
     var.common_tags,
     {

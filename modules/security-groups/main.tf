@@ -94,6 +94,15 @@ resource "aws_security_group" "public_subnet_lt_sg" {
   description = "security group for public subnet launch template"
   vpc_id = var.vpc_id
 
+  
+  ingress {
+    description = "Allow SSH traffic"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = [ var.ip_addr ] 
+  }
+
   ingress {
     description = "allow http traffic to instance"
     from_port = 80

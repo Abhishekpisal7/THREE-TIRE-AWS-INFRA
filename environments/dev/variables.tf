@@ -93,3 +93,10 @@ variable "instance_class" {
   description = "instance type for rds"
   type = string
 }
+
+## security group
+# ip addr for the security group
+variable "ip_addr" {
+  description = "ip for the security group"
+  type = string
+}

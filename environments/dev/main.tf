@@ -1,19 +1,19 @@
 module "vpc" {
-  source = "./modules/vpc"
+  source = "../../modules/vpc"
   vpc_cidr_block = var.vpc_cidr_block
 
   common_tags = local.common_tags
 }
 
 module "internet-gateway" {
-  source = "./modules/internet-gateway"
+  source = "../../modules/internet-gateway"
   vpc_id = module.vpc.vpc_id
 
   common_tags = local.common_tags
 }
 
 module "subnet" {
-  source = "./modules/subnets"
+  source = "../../modules/subnets"
   vpc_id = module.vpc.vpc_id
   azs = var.azs
   public_subnet_cidr = var.public_subnet_cidr
@@ -24,7 +24,7 @@ module "subnet" {
 }
 
 module "nat-gateway" {
-  source = "./modules/nat-gateway"
+  source = "../../modules/nat-gateway"
   azs = var.azs
   subnet_id = module.subnet.public_subnet_id
 
@@ -32,7 +32,7 @@ module "nat-gateway" {
 }
 
 module "route-tables" {
-  source = "./modules/route-tables"
+  source = "../../modules/route-tables"
   azs = var.azs
   vpc_id = module.vpc.vpc_id
   public_subnet_id = module.subnet.public_subnet_id
@@ -44,14 +44,15 @@ module "route-tables" {
 }
 
 module "security-groups" {
-  source = "./modules/security-groups"
+  source = "../../modules/security-groups"
   vpc_id = module.vpc.vpc_id
+  ip_addr = var.ip_addr
 
   common_tags = local.common_tags
 }
 
 module "alb" {
-  source = "./modules/alb"
+  source = "../../modules/alb"
   vpc_id = module.vpc.vpc_id
   public_subnet_id = module.subnet.public_subnet_id
   private_subnet_id = module.subnet.private_subnet_id
@@ -62,7 +63,7 @@ module "alb" {
 }
 
 module "autoscaling" {
-  source = "./modules/autoscaling"
+  source = "../../modules/autoscaling"
   image_id = var.image_id
   key = var.asg_key
   instance_type = var.asg_instance_type
@@ -72,12 +73,13 @@ module "autoscaling" {
   private_subnet_tg_arn =  module.alb.private_subnet_tg_arn
   public_subnet_security_group_id = module.security-groups.public_subnet_lt_sg_id
   private_subnet_security_group_id = module.security-groups.private_subnet_lt_sg_id
+  user_data_web = base64encode(file("../../scripts/userdata-web.sh"))
   
   common_tags = local.common_tags
 }
 
 module "bastion" {
-  source = "./modules/bastion"
+  source = "../../modules/bastion"
   azs = var.azs
   ami = var.ami
   key = var.key
@@ -89,7 +91,7 @@ module "bastion" {
 }
 
 module "rds" {
-  source = "./modules/rds"
+  source = "../../modules/rds"
   db_subnet_id = module.subnet.db_subnet_id
   database_sg = module.security-groups.database_sg
   username = var.username
