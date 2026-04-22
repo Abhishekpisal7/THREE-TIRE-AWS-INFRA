@@ -8,7 +8,6 @@ variable "vpc_id" {
 variable "ip_addr" {
   description = "My Ip Address"
   type = string
-  default = "152.58.31.114/32"
 }
 
 # Comman Tags
