@@ -56,8 +56,8 @@ module "alb" {
   vpc_id = module.vpc.vpc_id
   public_subnet_id = module.subnet.public_subnet_id
   private_subnet_id = module.subnet.private_subnet_id
-  public_subnet_alb_sg = module.security-groups.private_subnet_lb_sg_id
-  private_subnet_alb_sg =  module.security-groups.public_subnet_lb_sg_id
+  public_subnet_alb_sg = module.security-groups.public_subnet_lb_sg_id
+  private_subnet_alb_sg =  module.security-groups.private_subnet_lb_sg_id
   
   common_tags = local.common_tags
 }
