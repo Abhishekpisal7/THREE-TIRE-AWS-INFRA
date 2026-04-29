@@ -5,21 +5,21 @@ resource "aws_eip" "nat_eip" {
   tags = merge(
     var.common_tags,
     {
-        "Name" = "${each.value}_Nat_eip"
+      "Name" = "${each.value}_Nat_eip"
     }
   )
 }
 
 # NAT Gateway
 resource "aws_nat_gateway" "nat_gateway" {
-  for_each = toset(local.target_azs)
+  for_each      = toset(local.target_azs)
   allocation_id = aws_eip.nat_eip[each.key].id
-  subnet_id = var.subnet_id[each.value]
+  subnet_id     = var.subnet_id[each.value]
 
   tags = merge(
     var.common_tags,
     {
-        "Name" = "${each.value}_nat_gateway"
+      "Name" = "${each.value}_nat_gateway"
     }
   )
 }

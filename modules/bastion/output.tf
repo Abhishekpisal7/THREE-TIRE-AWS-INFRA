@@ -1,8 +1,8 @@
 output "bastion_host_id" {
   description = "Id Of bastion host"
   value = {
-    for az, i in aws_instance.bastion_host:
-        az => i.id
+    for az, i in aws_instance.bastion_host :
+    az => i.id
   }
 }
 
@@ -10,7 +10,7 @@ output "bastion_host_id" {
 output "bastion_host_ip" {
   description = "ip of bastion host"
   value = {
-    for az, i in aws_instance.bastion_host:
-      az => i.public_ip
+    for az, i in aws_instance.bastion_host :
+    az => i.public_ip
   }
 }

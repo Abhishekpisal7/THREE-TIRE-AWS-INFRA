@@ -5,7 +5,7 @@ resource "aws_internet_gateway" "internet_gateway" {
   tags = merge(
     var.common_tags,
     {
-        "Name" = "internet gateway"
+      "Name" = "internet gateway"
     }
   )
 }
